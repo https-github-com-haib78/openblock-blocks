@@ -16,30 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
 
 goog.provide('Blockly.Arduino.ZQ202');
 
 goog.require('Blockly.Arduino');
 
-Blockly.Arduino['arduino_pinZQ202_zq202SetDigitalOutput'] = function(block) {
+Blockly.Arduino['arduino_pinZQ_zq202setDigitalOutput'] = function(block) {
   var arg0 = block.getFieldValue('PIN') || '0';
-  var arg1 = Blockly.Arduino.valueToCode(block, 'LEVEL', Blockly.Arduino.ORDER_UNARY_POSTFIX);
-  //var arg1 = Blockly.Arduino.valueToCode(block, 'LEVEL', Blockly.Arduino.ORDER_UNARY_POSTFIX) || 'LOW';
-  var code = "digitalWrite(" + arg0 + "," + arg1 + ");\n";
-  return code;
-  /*
-  var arg0 = block.getFieldValue('PIN') || '0';
-  var arg1 = Block.getFieldValue('LEVEL') || 'LOW';   //(block, 'LEVEL', Blockly.Arduino.ORDER_UNARY_POSTFIX) || 'LOW';
-  //var arg1='22';block.getFieldValue('MODE') || 'INPUT';
-  Blockly.Arduino.setups_['zq202setDigitalOutput' + arg0] = 'pinMode(' + arg0 + ',OUTPUT);';
-
+  var arg1 = Blockly.Arduino.valueToCode(block, 'LEVEL', Blockly.Arduino.ORDER_UNARY_POSTFIX) || 'High';
+  Blockly.Arduino.setups_['zq202setDigitalOutput' + arg0] = 'pinMode(' + arg0 + ', OUTPUT);';
   var code = "digitalWrite(" + arg0 + ", " + arg1 + ");\n";
-  //var code = "digitalWrite(" + arg0 + ",);\n";
-  return code;*/
+  return code;
 };
 
-Blockly.Arduino['arduino_pinZQ202_zq202SetPwmOutput'] = function(block) {
+Blockly.Arduino['arduino_pinZQ_menu_level'] = function(block) {
+  var code = block.getFieldValue('level') || 'High';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino['arduino_pinZQ_zq202SetPwmOutput'] = function(block) {
   var arg0 = block.getFieldValue('PIN') || '0';
   var arg1 = Blockly.Arduino.valueToCode(block, 'OUT', Blockly.Arduino.ORDER_UNARY_POSTFIX) || 0;
   //var arg2 = '14';//block.getFieldValue('CH') || '0';
@@ -51,12 +48,40 @@ Blockly.Arduino['arduino_pinZQ202_zq202SetPwmOutput'] = function(block) {
   return code;
 };
 
-Blockly.Arduino['arduino_pinZQ202_zq202readAnalogPin'] = function(block) {
+Blockly.Arduino['arduino_pinZQ_zq202readDigitalPin'] = function(block) {
+  var arg0 = block.getFieldValue('PIN') || '0';
+  var code = "digitalRead(" + arg0 + ")";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino['arduino_pinZQ_zq202readAnalogPin'] = function(block) {
   var arg0 = block.getFieldValue('PIN') || 'P0';
   var code = "analogRead(" + arg0 + ")";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+//气泵
+Blockly.Arduino['arduino_pinZQ_zq202qibeng'] = function(block) {
+  var arg0 = block.getFieldValue('PIN') || '0';
+  var arg1 = block.getFieldValue('LEVEL') || 'High';
+  Blockly.Arduino.setups_['zq202qibeng' + arg0] = 'pinMode(' + arg0 + ', OUTPUT);';
+  var code = "digitalWrite(" + arg0 + ", " + arg1 + ");\n";
+  return code;
+};
+
+//蜂鸣器端口需修改
+Blockly.Arduino['arduino_pinZQ_zq202buzzer'] = function(block) {
+  Blockly.Arduino.setups_['zq202qibeng'] = 'pinMode( 5 , OUTPUT);';
+  var code = "digitalWrite(5);\n";
+  return code;
+};
+
+  //运行键端口须修改
+Blockly.Arduino['arduino_pinZQ_zq202run'] = function(block) {
+  Blockly.Arduino.setups_['zq202qibeng'] = 'pinMode( 2 , INPUT);';
+  var code = "digitalRead(2);\n";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
 /*
 Blockly.Arduino['arduino_pin_zq202SetServoOutput'] = function(block) {
   var arg0 = block.getFieldValue('PIN') || '0';
