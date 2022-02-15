@@ -82,6 +82,54 @@ Blockly.Arduino['arduino_pinZQ_zq202run'] = function(block) {
   var code = "digitalRead(2);\n";
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+//舵机
+/*
+Blockly.Arduino['arduino_MOTOR_zq202SetServoOutput'] = function(block) {
+  var arg0 = block.getFieldValue('PIN') || '0';
+  var arg1 = Blockly.Arduino.valueToCode(block, 'OUT', Blockly.Arduino.ORDER_UNARY_POSTFIX) || 0;
+  //var arg2 = block.getFieldValue('CH') || '0';
+
+  Blockly.Arduino.includes_['zq202SetServoOutput'] = '#include <Servo.h>';
+  Blockly.Arduino.definitions_['zq202SetServoOutput' + arg0] = 'Servo servo_' + arg0 + ';';
+  Blockly.Arduino.setups_['zq202SetServoOutput' + arg0] = 'servo_' + arg0 + '.attach' + '(' + arg0 + ', ' + arg0 + ');';
+
+  var code = 'servo_' + arg0 + '.write' + '(' + arg1 + ');\n';
+  return code;
+};*/
+//zq202EEPROMupdate
+Blockly.Arduino['arduino_pinZQ_zq202EEPROMupdate'] = function(block) {
+  var arg0 = Blockly.Arduino.valueToCode(block, 'PIN', Blockly.Arduino.ORDER_UNARY_POSTFIX) || 0;
+  var arg1 = Blockly.Arduino.valueToCode(block, 'OUT', Blockly.Arduino.ORDER_UNARY_POSTFIX) || 0;
+
+  Blockly.Arduino.includes_['zq202EEPROMupdate'] = '#include <EEPROM.h>';
+  Blockly.Arduino.setups_['zq202EEPROMupdate'] ='EEPROM.begin(1024);';
+  var code = 'EEPROM.writeZQ(' + arg0 + ', ' + arg1 + ');\n';//EEPROM.write(addr, val);
+  return code;
+};
+//EEPROM 读取
+Blockly.Arduino['arduino_pinZQ_zq202EEPROMread'] = function(block) {
+  var arg0 = Blockly.Arduino.valueToCode(block, 'PIN', Blockly.Arduino.ORDER_UNARY_POSTFIX) || 0;
+
+  Blockly.Arduino.includes_['zq202EEPROMupdate'] = '#include <EEPROM.h>';
+  Blockly.Arduino.setups_['zq202EEPROMupdate'] ='EEPROM.begin(1024);';
+
+  var code = "EEPROM.readZQ(" + arg0 + ")";
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+//串口打印
+Blockly.Arduino['arduino_pinZQ_zq202SerialPrint'] = function(block) {
+  var arg0 = Blockly.Arduino.valueToCode(block, 'VALUE', Blockly.Arduino.ORDER_UNARY_POSTFIX) || '';
+  var eol = block.getFieldValue('EOL') || 'warp';
+  Blockly.Arduino.setups_['zq202SerialPrint'] = 'Serial.begin(115200);';
+  var code = '';
+  if (eol === 'warp') {
+    code = 'Serial.println(' + arg0 + ');\n';
+  } else {
+    code = 'Serial.print(' + arg0 + ');\n';
+  }
+  return code;
+};
 /*
 Blockly.Arduino['arduino_pin_zq202SetServoOutput'] = function(block) {
   var arg0 = block.getFieldValue('PIN') || '0';
